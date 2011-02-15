@@ -1,0 +1,6 @@
+#no http://
+www.yahoo.com
+www.google.com
+www.mnctedss.ro
+#chucknorris.com
+looking-glass.optus.net.au
