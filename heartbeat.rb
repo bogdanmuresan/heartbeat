@@ -13,6 +13,8 @@ email_from = 'from@yourdomain.com'
 email_to = 'to@yourdomain.com'
 smtp_server = 'smtp.rdslink.ro'
 
+read_timeout = 120 # 2 minutes
+
 #open websites file
 File.open('websites.txt', 'r') do |line|  
 
@@ -30,7 +32,19 @@ File.open('websites.txt', 'r') do |line|
 
 			#fetch HTTP_RESPONSE from the current website
 			begin
-				response = Net::HTTP.get_response(URI.parse(website.to_s))
+				#response = Net::HTTP.get_response(URI.parse(website.to_s))
+				
+				url = URI.parse(website.to_s)
+				url.path = "/" if url.path.length < 1
+				http = Net::HTTP.new(url.host, url.port)
+				
+				#http.open_timeout = 120
+				http.read_timeout = read_timeout
+				
+				response = http.start do |http|
+				   http.request_head(url.path)
+				end 
+
 				code = response.code
 				message =  response.message
 			
